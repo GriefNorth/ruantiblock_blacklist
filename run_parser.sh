@@ -123,12 +123,12 @@ fi
 
 export DNSMASQ_DATA_FILE="${DATA_DIR}/${NAME}.dnsmasq"
 export IP_DATA_FILE="${DATA_DIR}/${NAME}.ip"
-export IPSET_IP="${NAME}_ip"
-export IPSET_IP_TMP="${IPSET_IP}_tmp"
-export IPSET_CIDR="${NAME}_cidr"
-export IPSET_CIDR_TMP="${IPSET_CIDR}_tmp"
-export IPSET_DNSMASQ="${NAME}_dnsmasq"
-export IPSET_ONION="${NAME}_onion"
+export IPSET_ONION="r_onion"
+export IPSET_CIDR="rc"
+export IPSET_CIDR_TMP="${IPSET_CIDR}t"
+export IPSET_IP="ri"
+export IPSET_IP_TMP="${IPSET_IP}t"
+export IPSET_DNSMASQ="rd"
 export UPDATE_STATUS_FILE="${DATA_DIR}/update_status"
 
 [ -d "$DATA_DIR" ] || mkdir -p "$DATA_DIR"
