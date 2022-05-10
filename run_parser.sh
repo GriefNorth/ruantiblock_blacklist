@@ -64,10 +64,10 @@ export ZI_ALL_URL="https://raw.githubusercontent.com/zapret-info/z-i/master/dump
 export AF_IP_URL="https://antifilter.download/list/allyouneed.lst"
 export AF_FQDN_URL="https://antifilter.download/list/domains.lst"
 # export RA_IP_IPSET_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/ruantiblock.ip"
-# export RA_IP_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/ruantiblock.fqdn"
+# export RA_IP_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/ruantiblock.dnsmasq"
 # export RA_IP_STAT_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/update_status"
 # export RA_FQDN_IPSET_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/ruantiblock.ip"
-# export RA_FQDN_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/ruantiblock.fqdn"
+# export RA_FQDN_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/ruantiblock.dnsmasq"
 # export RA_FQDN_STAT_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/update_status"
 export RBL_ENCODING=""
 export ZI_ENCODING="CP1251"
@@ -121,7 +121,7 @@ if [ -n "$2" ]; then
     export DATA_DIR="$2"
 fi
 
-export DNSMASQ_DATA_FILE="${DATA_DIR}/${NAME}.fqdn"
+export DNSMASQ_DATA_FILE="${DATA_DIR}/${NAME}.dnsmasq"
 export IP_DATA_FILE="${DATA_DIR}/${NAME}.ip"
 export IPSET_IP="${NAME}_ip"
 export IPSET_IP_TMP="${IPSET_IP}_tmp"
