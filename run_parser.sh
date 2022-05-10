@@ -110,7 +110,7 @@ case "$BLLIST_PRESET" in
 #         export BLLIST_SOURCE="ruantiblock"
 #         export BLLIST_MODE="fqdn"
 #     ;;
-    ;*)
+    *)
         export BLLIST_SOURCE="zapret-info"
         export BLLIST_MODE="fqdn"
     ;;
