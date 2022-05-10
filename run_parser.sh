@@ -6,7 +6,6 @@
 
 #################### Platform-specific settings ########################
 
-#export PATH="/opt/bin:/opt/sbin:/opt/usr/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 export NAME="ruantiblock"
 export LANG="en_US.UTF-8"
 export LANGUAGE="en"
@@ -64,16 +63,16 @@ export RBL_IP_URL="https://reestr.rublacklist.net/api/v2/ips/csv/"
 export ZI_ALL_URL="https://raw.githubusercontent.com/zapret-info/z-i/master/dump.csv"
 export AF_IP_URL="https://antifilter.download/list/allyouneed.lst"
 export AF_FQDN_URL="https://antifilter.download/list/domains.lst"
-export RA_IP_IPSET_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/ruantiblock.ip"
-export RA_IP_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/ruantiblock.dnsmasq"
-export RA_IP_STAT_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/update_status"
-export RA_FQDN_IPSET_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/ruantiblock.ip"
-export RA_FQDN_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/ruantiblock.dnsmasq"
-export RA_FQDN_STAT_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/update_status"
+# export RA_IP_IPSET_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/ruantiblock.ip"
+# export RA_IP_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/ruantiblock.fqdn"
+# export RA_IP_STAT_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/ip/update_status"
+# export RA_FQDN_IPSET_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/ruantiblock.ip"
+# export RA_FQDN_DMASK_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/ruantiblock.fqdn"
+# export RA_FQDN_STAT_URL="https://raw.githubusercontent.com/gSpotx2f/ruantiblock_blacklist/master/blacklist/fqdn/update_status"
 export RBL_ENCODING=""
 export ZI_ENCODING="CP1251"
 export AF_ENCODING=""
-export RA_ENCODING=""
+# export RA_ENCODING=""
 
 ############################ Configuration #############################
 
@@ -103,15 +102,15 @@ case "$BLLIST_PRESET" in
         export BLLIST_SOURCE="antifilter"
         export BLLIST_MODE="ip"
     ;;
-    ruantiblock-ip)
-        export BLLIST_SOURCE="ruantiblock"
-        export BLLIST_MODE="ip"
-    ;;
-    ruantiblock-fqdn)
-        export BLLIST_SOURCE="ruantiblock"
-        export BLLIST_MODE="fqdn"
-    ;;
-	*)
+#     ruantiblock-ip)
+#         export BLLIST_SOURCE="ruantiblock"
+#         export BLLIST_MODE="ip"
+#     ;;
+#     ruantiblock-fqdn)
+#         export BLLIST_SOURCE="ruantiblock"
+#         export BLLIST_MODE="fqdn"
+#     ;;
+    ;*)
         export BLLIST_SOURCE="zapret-info"
         export BLLIST_MODE="fqdn"
     ;;
@@ -122,7 +121,7 @@ if [ -n "$2" ]; then
     export DATA_DIR="$2"
 fi
 
-export DNSMASQ_DATA_FILE="${DATA_DIR}/${NAME}.dnsmasq"
+export DNSMASQ_DATA_FILE="${DATA_DIR}/${NAME}.fqdn"
 export IP_DATA_FILE="${DATA_DIR}/${NAME}.ip"
 export IPSET_IP="${NAME}_ip"
 export IPSET_IP_TMP="${IPSET_IP}_tmp"
