@@ -6,6 +6,7 @@
 
 #################### Platform-specific settings ########################
 
+export SCRIPT_NAME="ruantiblock_blacklist"
 export NAME="ruantiblock"
 export LANG="en_US.UTF-8"
 export LANGUAGE="en"
@@ -17,6 +18,13 @@ export MODULES_DIR="."
 
 ########################## Default Settings ############################
 
+### Запись событий в syslog (0 - off, 1 - on)
+export ENABLE_LOGGING=1
+### Кол-во попыток обновления блэклиста (в случае неудачи)
+export MODULE_RUN_ATTEMPTS=3
+### Таймаут между попытками обновления
+export MODULE_RUN_TIMEOUT=60
+### Модули для получения и обработки блэклиста
 BLLIST_MODULE="${MODULES_DIR}/ruab_parser.lua"
 #BLLIST_MODULE="${MODULES_DIR}/ruab_parser.py"
 
@@ -116,6 +124,14 @@ case "$BLLIST_PRESET" in
     ;;
 esac
 
+AWK_CMD="awk"
+LOGGER_CMD=`which logger`
+if [ $ENABLE_LOGGING = "1" -a $? -ne 0 ]; then
+    echo " Logger doesn't exists" >&2
+    ENABLE_LOGGING=0
+fi
+LOGGER_PARAMS="-t ${SCRIPT_NAME}"
+
 ### Output directory
 if [ -n "$2" ]; then
     export DATA_DIR="$2"
@@ -133,4 +149,67 @@ export UPDATE_STATUS_FILE="${DATA_DIR}/update_status"
 
 [ -d "$DATA_DIR" ] || mkdir -p "$DATA_DIR"
 
-nice -n 19 $BLLIST_MODULE
+MakeLogRecord() {
+    if [ $ENABLE_LOGGING = "1" ]; then
+        $LOGGER_CMD $LOGGER_PARAMS -p "user.${1}" "$2"
+    fi
+}
+
+GetDataFiles() {
+    local _return_code=1 _attempt=1 _update_string
+    if [ -n "$BLLIST_MODULE" ]; then
+        while :
+        do
+            nice -n 19 $BLLIST_MODULE
+            _return_code=$?
+            [ $_return_code -eq 0 ] && break
+            ### STDOUT
+            echo " Module run attempt ${_attempt}: failed [${BLLIST_MODULE}]"
+            MakeLogRecord "err" "Module run attempt ${_attempt}: failed [${BLLIST_MODULE}]"
+            _attempt=`expr $_attempt + 1`
+            [ $_attempt -gt $MODULE_RUN_ATTEMPTS ] && break
+            sleep $MODULE_RUN_TIMEOUT
+        done
+
+        if [ $_return_code -eq 0 ]; then
+            _update_string=`$AWK_CMD '{
+                printf "Received entries: %s\n", (NF < 3) ? "No data" : "CIDR: "$1", IP: "$2", FQDN: "$3;
+                exit;
+            }' "$UPDATE_STATUS_FILE"`
+            ### STDOUT
+            echo " ${_update_string}"
+            MakeLogRecord "notice" "${_update_string}"
+        fi
+    else
+        _return_code=0
+    fi
+    return $_return_code
+}
+
+Update() {
+    local _return_code=0
+
+    echo " ${SCRIPT_NAME} update (${1})..."
+    MakeLogRecord "notice" "update (${1})..."
+    GetDataFiles
+    case $? in
+        0)
+            echo " Blacklist updated"
+            MakeLogRecord "notice" "Blacklist updated"
+        ;;
+        2)
+            echo " Error! Blacklist update error" >&2
+            MakeLogRecord "err" "Error! Blacklist update error"
+            _return_code=1
+        ;;
+        *)
+            echo " Module error! [${BLLIST_MODULE}]" >&2
+            MakeLogRecord "err" "Module error! [${BLLIST_MODULE}]"
+            _return_code=1
+        ;;
+    esac
+    return $_return_code
+}
+
+Update $1
+exit $?
